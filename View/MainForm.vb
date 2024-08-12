@@ -16,22 +16,13 @@ Public Class MainForm
     End Sub
 
     Private Sub BtnComparar_Click(sender As Object, e As EventArgs) Handles BtnComparar.Click
-        'Dim rutas As String() = TxtArchivos.Text.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
         Dim rutas As String() = TxtArchivos.Text.Split(New String() {vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
-        'Dim rutas As String() = TxtArchivos.Text.Split(New String() {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-        'For Each ruta In rutas
-        '    Debug.WriteLine($"Ruta cargada: {ruta}")
-        'Next
         Dim encabezadoValidator As New EncabezadoValidator()
         Dim rendicionDeBoletasValidator As New RendicionDeBoletasValidator()
         Dim rendicionDeFacturaValidator As New RendicionDeFacturaValidator()
         Dim rendicionDeViaticosValidator As New RendicionDeViaticosValidator()
         Dim controller As New ComparisonController(encabezadoValidator, rendicionDeBoletasValidator, rendicionDeFacturaValidator, rendicionDeViaticosValidator)
-        'Dim archivosCargados = controller.CargarArchivos(rutas)
         Dim archivosCargados = controller.CargarArchivos(rutas)
-        'Dim archivosCargados = controller.CargarArchivos(rutas)
-        'Debug.WriteLine($"Encabezados cargados para validación: {archivosCargados.Encabezados.Count}")
-        'Debug.WriteLine($"Rendiciones de Boletas cargadas para validación: {archivosCargados.RendicionesDeBoletas.Count}")
         Dim mensajes As New List(Of String)()
 
         ' Restaurar colores iniciales
@@ -67,9 +58,7 @@ Public Class MainForm
         End If
 
         For Each encabezado In archivosCargados.Encabezados
-            'Console.WriteLine($"Ruta del archivo: {encabezado.Archivo}")
             Dim errores = controller.CompararEncabezado(encabezado)
-            'RestaurarColorCeldas(encabezado.Archivo, "ENCABEZADO")
             If errores.Count > 0 Then
                 ' Pinta las celdas con errores en el archivo
                 PintarCeldasConErrores(encabezado, errores, "ENCABEZADO")
@@ -79,7 +68,6 @@ Public Class MainForm
 
         For Each rendicion In archivosCargados.RendicionesDeBoletas
             Dim errores = controller.CompararRendicionDeBoletas(rendicion)
-            'RestaurarColorCeldas(rendicion.Archivo, "RENDICION DE BOLETAS")
             If errores.Count > 0 Then
                 PintarCeldasConErrores(rendicion, errores, "RENDICION DE BOLETAS")
                 mensajes.AddRange(errores)
@@ -103,25 +91,6 @@ Public Class MainForm
                 mensajes.AddRange(errores)
             End If
         Next
-
-
-        'Dim duplicados = controller.ValidarS3(archivosCargados.Encabezados)
-        'For Each encabezado In archivosCargados.Encabezados
-        '    PintarCeldasConErrores(encabezado, duplicados, "ENCABEZADO")
-        '    mensajes.AddRange(duplicados)
-        'Next
-
-        ' Validar duplicados en la celda Y
-        'Dim todasLasRendiciones As New List(Of RendicionDeBoletas)
-        'todasLasRendiciones.AddRange(archivosCargados.RendicionesDeBoletas)
-
-        'Dim duplicadosY = ValidarYNoRepetido(todasLasRendiciones)
-        'mensajes.AddRange(duplicadosY)
-        'If duplicadosY.Count > 0 Then
-        '    For Each rendicion In archivosCargados.RendicionesDeBoletas
-        '        PintarCeldasConErrores(rendicion, duplicadosY, "RENDICION DE BOLETAS")
-        '    Next
-        'End If
 
         If mensajes.Count = 0 Then
             MessageBox.Show("Todas las planillas son válidas.")
@@ -211,123 +180,8 @@ Public Class MainForm
                                 PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
                             End If
                         End If
-                        'If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                        '    Dim partes = errorMensaje.Split(", ")
-                        '    Dim filaIndex As String
-                        '    Dim columna As String
-                        '    If errorMensaje.Contains("se repite en") Then
-                        '        ' Mensaje de error específico de ValidarYNoRepetido
-                        '        Dim subpartes = partes(2).Split(": ")
-                        '        For Each parte In partes
-                        '            Console.WriteLine(parte)
-                        '        Next
-
-                        '        filaIndex = subpartes(1).Trim()
-                        '        columna = "Y" ' La columna es fija en este caso
-                        '        '' Mensaje de error específico de ValidarYNoRepetido
-                        '        'Dim subpartes = partes(1).Split(": ")
-                        '        'filaIndex = subpartes(1).Trim()
-                        '        'columna = "Y" ' La columna es fija en este caso
-                        '    Else
-                        '        ' Mensaje de error general
-                        '        filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                        '        columna = partes(3).Replace("Columna: ", String.Empty).Trim()
-                        '    End If
-
-                        '    PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
-                        'End If
                     Next
                 End If
-                'ElseIf hojaNombre.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase) Then
-                '    ' Pintar celdas dinámicas basadas en errores en la hoja RENDICION DE BOLETAS
-                '    For Each errorMensaje In errores
-                '        If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                '            Dim partes = errorMensaje.Split(", ")
-                '            Dim filaIndex As String
-                '            Dim columna As String
-                '            If errorMensaje.Contains("se repite en") Then
-                '                ' Mensaje de error específico de ValidarYNoRepetido
-                '                Dim subpartes = partes(1).Split(": ")
-                '                filaIndex = subpartes(1).Trim()
-                '                columna = "Y" ' La columna es fija en este caso
-                '            Else
-                '                ' Mensaje de error general
-                '                filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                '                columna = partes(3).Replace("Columna: ", String.Empty).Trim()
-                '            End If
-
-                '            PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
-                '        End If
-                '    Next
-                'ElseIf hojaNombre.Equals("RENDICION DE FACTURA", StringComparison.OrdinalIgnoreCase) Then
-                '    ' Pintar celdas dinámicas basadas en errores en la hoja RENDICION DE FACTURA
-                '    For Each errorMensaje In errores
-                '        If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                '            Dim partes = errorMensaje.Split(", ")
-                '            Dim filaIndex As String
-                '            Dim columna As String
-                '            If errorMensaje.Contains("se repite en") Then
-                '                ' Mensaje de error específico de ValidarYNoRepetido
-                '                Dim subpartes = partes(1).Split(": ")
-                '                filaIndex = subpartes(1).Trim()
-                '                columna = "Y" ' La columna es fija en este caso
-                '            Else
-                '                ' Mensaje de error general
-                '                filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                '                columna = partes(3).Replace("Columna: ", String.Empty).Trim()
-                '            End If
-
-                '            PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
-                '        End If
-                '    Next
-                'End If
-
-                'Else 'hojaNombre.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase) Then
-                '    ' Pintar celdas dinámicas basadas en errores en la hoja RENDICION DE BOLETAS
-                '    For Each errorMensaje In errores
-                '        If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                '            Dim partes = errorMensaje.Split(", ")
-                '            Dim archivoMensaje = partes(0).Replace("Archivo: ", String.Empty).Trim()
-                '            If archivoMensaje.Equals(archivo, StringComparison.OrdinalIgnoreCase) Then
-                '                Dim filaIndex As String
-                '                Dim columna As String
-
-                '                If errorMensaje.Contains("se repite en") Then
-                '                    ' Mensaje de error específico de ValidarYNoRepetido
-                '                    Dim subpartes = partes(1).Split(": ")
-                '                    filaIndex = subpartes(1).Trim()
-                '                    columna = "Y" ' La columna es fija en este caso
-                '                Else
-                '                    ' Mensaje de error general
-                '                    filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                '                    columna = partes(3).Replace("Columna: ", String.Empty).Trim()
-                '                End If
-
-                '                PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
-                '            End If
-                '        End If
-                '    Next
-                '    'For Each errorMensaje In errores
-                '    '    If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                '    '        Dim partes = errorMensaje.Split(", ")
-                '    '        Dim filaIndex As String
-                '    '        Dim columna As String
-                '    '        If errorMensaje.Contains("se repite en") Then
-                '    '            ' Mensaje de error específico de ValidarYNoRepetido
-                '    '            Dim subpartes = partes(1).Split(": ")
-                '    '            filaIndex = subpartes(1).Trim()
-                '    '            columna = "Y" ' La columna es fija en este caso
-                '    '        Else
-                '    '            ' Mensaje de error general
-                '    '            filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                '    '            columna = partes(3).Replace("Columna: ", String.Empty).Trim()
-                '    '        End If
-
-                '    '        PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
-                '    '    End If
-
-                '    'Next
-                'End If
 
                 package.Save()
             End Using
@@ -339,14 +193,12 @@ Public Class MainForm
         If celda IsNot Nothing Then
             celda.Style.Fill.PatternType = ExcelFillStyle.Solid
             celda.Style.Fill.BackgroundColor.SetColor(Color.Red)
-            'Console.WriteLine(celda.Address & " ha sido pintada de rojo")
         End If
     End Sub
     Private Sub RestaurarColorCelda(celda As ExcelRange)
         If celda IsNot Nothing Then
             celda.Style.Fill.PatternType = ExcelFillStyle.Solid
             celda.Style.Fill.BackgroundColor.SetColor(Color.White)
-            'Console.WriteLine(celda.Address & " ha sido pintada de blanco")
         End If
     End Sub
 
@@ -426,36 +278,7 @@ Public Class MainForm
                 package.Save()
             End Using
         Catch ex As Exception
-            ' Manejo de la excepción
+            MsgBox(ex)
         End Try
     End Sub
-
-    'Private Sub RestaurarColorCeldas(archivo As String, hojaNombre As String)
-    '    Try
-    '        If Not File.Exists(archivo) Then
-    '            Return
-    '        End If
-
-    '        Using package As New ExcelPackage(New FileInfo(archivo))
-    '            Dim hoja = package.Workbook.Worksheets.FirstOrDefault(Function(ws) ws.Name.Equals(hojaNombre, StringComparison.OrdinalIgnoreCase))
-    '            If hoja Is Nothing Then
-    '                Return
-    '            End If
-
-    '            ' Añade aquí más celdas según sea necesario
-    '            RestaurarColorCelda(hoja.Cells("Y2"))
-    '            RestaurarColorCelda(hoja.Cells("L7"))
-    '            RestaurarColorCelda(hoja.Cells("V6"))
-    '            RestaurarColorCelda(hoja.Cells("D17"))
-    '            RestaurarColorCelda(hoja.Cells("X15"))
-    '            RestaurarColorCelda(hoja.Cells("S5"))
-    '            RestaurarColorCelda(hoja.Cells("S3"))
-    '            'RestaurarColorCelda(hoja.Cells("X"))
-    '            'RestaurarColorCelda(hoja.Cells("Y"))
-    '            package.Save()
-    '        End Using
-    '    Catch ex As Exception
-    '        ' Manejo de la excepción
-    '    End Try
-    'End Sub
 End Class

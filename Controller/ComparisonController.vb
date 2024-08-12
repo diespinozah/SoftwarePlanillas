@@ -36,22 +36,13 @@ Public Class ComparisonController
             .RendicionesDeFactura = New List(Of RendicionDeFactura)(),
             .RendicionesDeViaticos = New List(Of RendicionDeViaticos)()
         }
-        'Debug.WriteLine("Inicializando la carga de archivos.")
 
         For Each ruta In rutas
             If Not File.Exists(ruta) Then
-                'Debug.WriteLine($"Archivo no encontrado: {ruta}")
                 Continue For
             End If
 
-            'Debug.WriteLine($"Cargando archivo: {ruta}")
-
             Using package As New ExcelPackage(New FileInfo(ruta))
-
-                ' Listar todas las hojas para depuración
-                'For Each hoja In package.Workbook.Worksheets
-                '    Debug.WriteLine($"Hoja encontrada en el archivo: {hoja.Name}")
-                'Next
 
                 Dim hojaEncabezado = package.Workbook.Worksheets.FirstOrDefault(Function(ws) ws.Name.Equals("ENCABEZADO", StringComparison.OrdinalIgnoreCase))
                 If hojaEncabezado IsNot Nothing Then
@@ -67,7 +58,6 @@ Public Class ComparisonController
                         .Archivo = ruta
                 }
                     resultado.Encabezados.Add(encabezado)
-                    'Debug.WriteLine($"Hoja 'ENCABEZADO' encontrada y cargada en el archivo: {ruta}")
                 Else
                     Debug.WriteLine($"Hoja 'ENCABEZADO' no encontrada en el archivo: {ruta}")
                 End If
@@ -75,21 +65,6 @@ Public Class ComparisonController
                 ' Cargar RENDICION DE BOLETAS
                 Dim hojaRendicionDeBoletas = package.Workbook.Worksheets.FirstOrDefault(Function(ws) ws.Name.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase))
                 If hojaRendicionDeBoletas IsNot Nothing Then
-                    ''Dim rendicion As New RendicionDeBoletas With {
-                    ''    .Archivo = ruta,
-                    ''    .Data = New List(Of List(Of String))()
-                    ''}
-
-                    ''For i As Integer = 15 To hojaRendicionDeBoletas.Dimension.End.Row
-                    ''    Dim fila As New List(Of String)()
-                    ''    For j As Integer = 2 To 27
-                    ''        fila.Add(hojaRendicionDeBoletas.Cells(i, j).Text)
-                    ''    Next
-                    ''    If fila.Any(Function(c) Not String.IsNullOrEmpty(c)) Then
-                    ''        rendicion.Data.Add(fila)
-                    ''    End If
-                    ''Next
-                    ''resultado.RendicionesDeBoletas.Add(rendicion)
                     Dim data As New List(Of List(Of String))()
                     For row = 15 To hojaRendicionDeBoletas.Dimension.End.Row
                         If IsRowEmpty(hojaRendicionDeBoletas, row) Then Exit For
@@ -147,9 +122,6 @@ Public Class ComparisonController
                 End If
             End Using
         Next
-
-        'Debug.WriteLine($"Total de encabezados cargados: {resultado.Encabezados.Count}")
-        'Debug.WriteLine($"Total de rendiciones de boletas cargadas: {resultado.RendicionesDeBoletas.Count}")
 
         Return resultado
     End Function

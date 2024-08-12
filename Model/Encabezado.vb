@@ -1,4 +1,5 @@
-﻿Public Class Encabezado
+﻿'Model/Encabezado.vb
+Public Class Encabezado
     Public Property Y2 As String
     Public Property L7 As String
     Public Property V6 As String

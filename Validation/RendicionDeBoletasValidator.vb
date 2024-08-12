@@ -41,10 +41,6 @@ Public Class RendicionDeBoletasValidator
             If String.IsNullOrEmpty(contenidoCeldaP) OrElse Not (Ingenieros.Any(Function(ingeniero) contenidoCeldaP.Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) contenidoCeldaP.Contains(funcionario))) Then
                 errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE BOLETAS, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
             End If
-            'If String.IsNullOrEmpty(fila(14)) OrElse Not (Ingenieros.Any(Function(ingeniero) fila(14).ToUpper().Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) fila(14).ToUpper().Contains(funcionario))) Then
-            '    'Ingenieros.Any(Function(ingeniero) fila(14).ToUpper().Contains(ingeniero)) OrElse Not Funcionarios.Any(Function(funcionario) fila(14).ToUpper().Contains(funcionario)) Then '(Ingenieros.Contains(fila(14).ToUpper) OrElse Funcionarios.Contains(fila(14).ToUpper)) Then
-            '    errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE BOLETAS, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
-            'End If
 
             ' 5. Celda T
             If fila(10) = "COM" AndAlso String.IsNullOrEmpty(fila(18)) Then
@@ -117,11 +113,6 @@ Public Class RendicionDeBoletasValidator
                 Else
                     valores(valorY) = New List(Of String) From {$"{rendicion.Archivo}, Hoja: {hojaNombre}, Fila: {i + 15}, Columna: Y"}
                 End If
-                'If valores.ContainsKey(valorY) Then
-                '    valores(valorY).Add($"{rendicion.Archivo}, Fila: {i + 15}, Columna: Y")
-                'Else
-                '    valores(valorY) = New List(Of String) From {$"{rendicion.Archivo}, Fila: {i + 15}, Columna: Y"}
-                'End If
             Next
         Next
 

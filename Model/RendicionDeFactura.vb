@@ -1,4 +1,5 @@
-﻿Public Class RendicionDeFactura
+﻿'Model/RendicionDeFactura.vb
+Public Class RendicionDeFactura
     Public Property Data As List(Of List(Of String))
     Public Property Archivo As String
 End Class
