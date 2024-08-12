@@ -6,11 +6,13 @@ Public Class ComparisonController
     Private ReadOnly _encabezadoValidator As EncabezadoValidator
     Private ReadOnly _rendicionDeBoletasValidator As RendicionDeBoletasValidator
     Private ReadOnly _rendicionDeFacturaValidator As RendicionDeFacturaValidator
+    Private ReadOnly _rendicionDeViaticosValidator As RendicionDeViaticosValidator
 
-    Public Sub New(encabezadoValidator As EncabezadoValidator, rendicionDeBoletasValidator As RendicionDeBoletasValidator, rendicionDeFacturaValidator As RendicionDeFacturaValidator)
+    Public Sub New(encabezadoValidator As EncabezadoValidator, rendicionDeBoletasValidator As RendicionDeBoletasValidator, rendicionDeFacturaValidator As RendicionDeFacturaValidator, rendicionDeViaticosValidator As RendicionDeViaticosValidator)
         _encabezadoValidator = encabezadoValidator
         _rendicionDeBoletasValidator = rendicionDeBoletasValidator
         _rendicionDeFacturaValidator = rendicionDeFacturaValidator
+        _rendicionDeViaticosValidator = rendicionDeViaticosValidator
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial ' Configura la licencia
     End Sub
 
@@ -23,12 +25,16 @@ Public Class ComparisonController
     Public Function CompararRendicionDeFactura(rendicion As RendicionDeFactura) As List(Of String)
         Return _rendicionDeFacturaValidator.Validar(rendicion)
     End Function
+    Public Function CompararRendicionDeViaticos(rendicion As RendicionDeViaticos) As List(Of String)
+        Return _rendicionDeViaticosValidator.Validar(rendicion)
+    End Function
 
     Public Function CargarArchivos(rutas As String()) As ArchivoCargado
         Dim resultado As New ArchivoCargado With {
             .Encabezados = New List(Of Encabezado)(),
             .RendicionesDeBoletas = New List(Of RendicionDeBoletas)(),
-            .RendicionesDeFactura = New List(Of RendicionDeFactura)()
+            .RendicionesDeFactura = New List(Of RendicionDeFactura)(),
+            .RendicionesDeViaticos = New List(Of RendicionDeViaticos)()
         }
         'Debug.WriteLine("Inicializando la carga de archivos.")
 
@@ -118,6 +124,26 @@ Public Class ComparisonController
                         .Archivo = ruta
                     }
                     resultado.RendicionesDeFactura.Add(rendicion)
+                End If
+
+                ' Al cargar los archivos, incluir la carga de "RENDICION DE VIATICOS":
+                Dim hojaRendicionDeViaticos = package.Workbook.Worksheets.FirstOrDefault(Function(ws) ws.Name.Equals("RENDICION DE VIATICOS", StringComparison.OrdinalIgnoreCase))
+                If hojaRendicionDeViaticos IsNot Nothing Then
+                    Dim data As New List(Of List(Of String))()
+                    For row = 15 To hojaRendicionDeViaticos.Dimension.End.Row
+                        If IsRowEmpty(hojaRendicionDeViaticos, row) Then Exit For
+                        Dim filaData As New List(Of String)()
+                        For col = 2 To 25 ' Columnas B to Y (2 to 25)
+                            filaData.Add(hojaRendicionDeViaticos.Cells(row, col).Text)
+                        Next
+                        data.Add(filaData)
+                    Next
+
+                    Dim rendicion As New RendicionDeViaticos With {
+                        .Data = data,
+                        .Archivo = ruta
+                    }
+                    resultado.RendicionesDeViaticos.Add(rendicion)
                 End If
             End Using
         Next

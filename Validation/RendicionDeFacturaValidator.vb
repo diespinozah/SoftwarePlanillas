@@ -34,7 +34,7 @@ Public Class RendicionDeFacturaValidator
 
             Dim contenidoCeldaP As String = QuitarTildes(fila(14).ToUpper())
             If String.IsNullOrEmpty(contenidoCeldaP) OrElse Not (Ingenieros.Any(Function(ingeniero) contenidoCeldaP.Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) contenidoCeldaP.Contains(funcionario))) Then
-                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE BOLETAS, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
+                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE FACTURA, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
             End If
 
             'If String.IsNullOrEmpty(fila(14)) OrElse Not (Ingenieros.Any(Function(ingeniero) fila(14).ToUpper().Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) fila(14).ToUpper().Contains(funcionario))) Then

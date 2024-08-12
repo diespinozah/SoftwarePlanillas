@@ -25,7 +25,8 @@ Public Class MainForm
         Dim encabezadoValidator As New EncabezadoValidator()
         Dim rendicionDeBoletasValidator As New RendicionDeBoletasValidator()
         Dim rendicionDeFacturaValidator As New RendicionDeFacturaValidator()
-        Dim controller As New ComparisonController(encabezadoValidator, rendicionDeBoletasValidator, rendicionDeFacturaValidator)
+        Dim rendicionDeViaticosValidator As New RendicionDeViaticosValidator()
+        Dim controller As New ComparisonController(encabezadoValidator, rendicionDeBoletasValidator, rendicionDeFacturaValidator, rendicionDeViaticosValidator)
         'Dim archivosCargados = controller.CargarArchivos(rutas)
         Dim archivosCargados = controller.CargarArchivos(rutas)
         'Dim archivosCargados = controller.CargarArchivos(rutas)
@@ -94,6 +95,16 @@ Public Class MainForm
             End If
         Next
 
+        ' Validar y pintar errores en la hoja RENDICION DE VIATICOS
+        For Each rendicion In archivosCargados.RendicionesDeViaticos
+            Dim errores = controller.CompararRendicionDeViaticos(rendicion)
+            If errores.Count > 0 Then
+                PintarCeldasConErrores(rendicion, errores, "RENDICION DE VIATICOS")
+                mensajes.AddRange(errores)
+            End If
+        Next
+
+
         'Dim duplicados = controller.ValidarS3(archivosCargados.Encabezados)
         'For Each encabezado In archivosCargados.Encabezados
         '    PintarCeldasConErrores(encabezado, duplicados, "ENCABEZADO")
@@ -129,7 +140,11 @@ Public Class MainForm
 
     Private Sub PintarCeldasConErrores(model As Object, errores As List(Of String), hojaNombre As String)
         Try
-            Dim archivo As String = If(TypeOf model Is Encabezado, CType(model, Encabezado).Archivo, If(TypeOf model Is RendicionDeBoletas, CType(model, RendicionDeBoletas).Archivo, CType(model, RendicionDeFactura).Archivo))
+            Dim archivo As String = If(TypeOf model Is Encabezado, CType(model, Encabezado).Archivo,
+                           If(TypeOf model Is RendicionDeBoletas, CType(model, RendicionDeBoletas).Archivo,
+                           If(TypeOf model Is RendicionDeFactura, CType(model, RendicionDeFactura).Archivo,
+                           CType(model, RendicionDeViaticos).Archivo)))
+
             If Not File.Exists(archivo) Then
                 errores.Add($"Archivo: {archivo}, Error: El archivo no existe.")
                 Return
@@ -161,7 +176,9 @@ Public Class MainForm
                             PintarCelda(hoja.Cells("S3"))
                         End If
                     Next
-                ElseIf hojaNombre.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase) OrElse hojaNombre.Equals("RENDICION DE FACTURA", StringComparison.OrdinalIgnoreCase) Then
+                ElseIf hojaNombre.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase) OrElse
+                       hojaNombre.Equals("RENDICION DE FACTURA", StringComparison.OrdinalIgnoreCase) OrElse
+                       hojaNombre.Equals("RENDICION DE VIATICOS", StringComparison.OrdinalIgnoreCase) Then
                     ' Pintar celdas dinámicas basadas en errores en la hoja RENDICION DE BOLETAS o RENDICION DE FACTURA
                     For Each errorMensaje In errores
                         If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
@@ -386,6 +403,23 @@ Public Class MainForm
                         RestaurarColorCelda(hojaRendicionDeFactura.Cells($"Y{row}"))
                         RestaurarColorCelda(hojaRendicionDeFactura.Cells($"Z{row}"))
                         RestaurarColorCelda(hojaRendicionDeFactura.Cells($"AA{row}"))
+                    Next
+                End If
+
+                ' Restaurar colores de la hoja RENDICION DE BOLETAS
+                Dim hojaRendicionDeViaticos = package.Workbook.Worksheets.FirstOrDefault(Function(ws) ws.Name.Equals("RENDICION DE VIATICOS", StringComparison.OrdinalIgnoreCase))
+                If hojaRendicionDeViaticos IsNot Nothing Then
+                    For row = 15 To 49
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"B{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"L{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"N{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"P{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"T{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"U{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"V{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"W{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"X{row}"))
+                        RestaurarColorCelda(hojaRendicionDeViaticos.Cells($"Y{row}"))
                     Next
                 End If
 

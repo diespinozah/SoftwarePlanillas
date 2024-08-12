@@ -111,11 +111,11 @@
     <Compile Include="Model\Encabezado.vb" />
     <Compile Include="Model\RendicionDeBoletas.vb" />
     <Compile Include="Model\RendicionDeFactura.vb" />
-    <Compile Include="Model\RendicionViaticos.vb" />
+    <Compile Include="Model\RendicionDeViaticos.vb" />
     <Compile Include="Validation\EncabezadoValidator.vb" />
     <Compile Include="Validation\RendicionDeBoletasValidator.vb" />
     <Compile Include="Validation\RendicionDeFacturaValidator.vb" />
-    <Compile Include="Validation\RendicionViaticosValidator.vb" />
+    <Compile Include="Validation\RendicionDeViaticosValidator.vb" />
     <Compile Include="Validation\Validator.vb" />
     <Compile Include="View\MainForm.vb">
       <SubType>Form</SubType>
