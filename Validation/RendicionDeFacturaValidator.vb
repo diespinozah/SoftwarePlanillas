@@ -1,14 +1,16 @@
 ﻿' Validation/RendicionDeFacturaValidator.vb
+Imports System.Text
+Imports System.Globalization
 Public Class RendicionDeFacturaValidator
     Inherits Validator
 
     Private ReadOnly Ingenieros As String() = {
-        "ESPINOZA HERNANDEZ DIEGO", "SEPULVEDA BRAVO JUAN", "HONORATO LOPEZ GONZALO",
-        "OLAVARRIA ARANCIBIA TOMAS", "ASTUDILLO DIAZ RICARDO", "HERRERA MENDOZA DYLAN",
-        "VEGA MOLINA BRIAM", "FERNANDEZ CARRASCO PEDRO", "ROMAN MUÑOZ CLAUDIO"
+        "DIEGO ESPINOZA", "JUAN SEPULVEDA", "GONZALO HONORATO",
+        "TOMAS OLAVARRIA", "RICARDO ASTUDILLO", "DYLAN HERRERA",
+        "BRIAM VEGA", "PEDRO FERNANDEZ", "CLAUDIO ROMAN"
     }
 
-    Private ReadOnly Funcionarios As String() = {"RODRIGUEZ GREY OSCAR", "PEREIRA SOTO FIDEL"}
+    Private ReadOnly Funcionarios As String() = {"OSCAR RODRIGUEZ", "FIDEL PEREIRA"}
 
     Public Function Validar(model As Object) As List(Of String)
         Dim rendicion As RendicionDeFactura = CType(model, RendicionDeFactura)
@@ -30,9 +32,15 @@ Public Class RendicionDeFacturaValidator
                 errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE FACTURA, Fila: {filaIndex}, Columna: N, Error: campo en blanco")
             End If
 
-            If String.IsNullOrEmpty(fila(14)) OrElse Not (Ingenieros.Contains(fila(14)) OrElse Funcionarios.Contains(fila(14))) Then
-                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE FACTURA, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
+            Dim contenidoCeldaP As String = QuitarTildes(fila(14).ToUpper())
+            If String.IsNullOrEmpty(contenidoCeldaP) OrElse Not (Ingenieros.Any(Function(ingeniero) contenidoCeldaP.Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) contenidoCeldaP.Contains(funcionario))) Then
+                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE BOLETAS, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
             End If
+
+            'If String.IsNullOrEmpty(fila(14)) OrElse Not (Ingenieros.Any(Function(ingeniero) fila(14).ToUpper().Contains(ingeniero)) OrElse Funcionarios.Any(Function(funcionario) fila(14).ToUpper().Contains(funcionario))) Then
+            '    'Ingenieros.Any(Function(ingeniero) fila(14).ToUpper().Contains(ingeniero)) OrElse Not Funcionarios.Any(Function(funcionario) fila(14).ToUpper().Contains(funcionario)) Then '(Ingenieros.Contains(fila(14).ToUpper) OrElse Funcionarios.Contains(fila(14).ToUpper)) Then
+            '    errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE BOLETAS, Fila: {filaIndex}, Columna: P, Error: campo en blanco o valor inválido")
+            'End If
 
             If String.IsNullOrEmpty(fila(18)) Then
                 errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE FACTURA, Fila: {filaIndex}, Columna: T, Error: campo en blanco")
@@ -114,5 +122,17 @@ Public Class RendicionDeFacturaValidator
         Next
 
         Return duplicados
+    End Function
+    Private Function QuitarTildes(texto As String) As String
+        Dim normalizedString As String = texto.Normalize(NormalizationForm.FormD)
+        Dim sb As New StringBuilder()
+
+        For Each c As Char In normalizedString
+            If CharUnicodeInfo.GetUnicodeCategory(c) <> UnicodeCategory.NonSpacingMark Then
+                sb.Append(c)
+            End If
+        Next
+
+        Return sb.ToString().Normalize(NormalizationForm.FormC)
     End Function
 End Class

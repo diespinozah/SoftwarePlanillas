@@ -165,26 +165,60 @@ Public Class MainForm
                     ' Pintar celdas dinámicas basadas en errores en la hoja RENDICION DE BOLETAS o RENDICION DE FACTURA
                     For Each errorMensaje In errores
                         If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
-                            Dim partes = errorMensaje.Split(", ")
-                            Dim filaIndex As String
-                            Dim columna As String
-                            If errorMensaje.Contains("se repite en") Then
-                                ' Mensaje de error específico de ValidarYNoRepetido
-                                Dim subpartes = partes(2).Split(": ")
-                                filaIndex = subpartes(1).Trim()
-                                columna = "Y" ' La columna es fija en este caso
-                                '' Mensaje de error específico de ValidarYNoRepetido
-                                'Dim subpartes = partes(1).Split(": ")
-                                'filaIndex = subpartes(1).Trim()
-                                'columna = "Y" ' La columna es fija en este caso
+                            Dim partes = errorMensaje.Split(New String() {", "}, StringSplitOptions.None)
+                            Dim esRepetido = errorMensaje.Contains("se repite en")
+
+                            If esRepetido Then
+                                ' Recorrer todas las partes del mensaje que contienen información de archivo, hoja, fila y columna
+                                For i As Integer = 0 To partes.Length - 1 Step 4
+                                    If i + 2 < partes.Length Then
+                                        Dim archivoInfo = partes(i).Trim()
+                                        If archivoInfo.StartsWith("El valor") Then
+                                            'archivoInfo = archivoInfo.Substring(":")
+                                            archivoInfo = archivoInfo.Substring(archivoInfo.IndexOf(":") + 1).Trim()
+                                        End If
+                                        Dim hojaInfo = partes(i + 1).Trim()
+                                        Dim filaInfo = partes(i + 2).Trim().Replace("Fila: ", String.Empty)
+                                        Dim columnaInfo = "Y"
+
+                                        ' Asegurarse de que el archivo y la hoja coinciden
+                                        If archivo.Contains(archivoInfo) AndAlso hojaNombre.Equals(hojaInfo.Replace("Hoja: ", String.Empty), StringComparison.OrdinalIgnoreCase) Then
+                                            PintarCelda(hoja.Cells($"{columnaInfo}{filaInfo}"))
+                                        End If
+                                    End If
+                                Next
                             Else
                                 ' Mensaje de error general
-                                filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
-                                columna = partes(3).Replace("Columna: ", String.Empty).Trim()
+                                Dim filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
+                                Dim columna = partes(3).Replace("Columna: ", String.Empty).Trim()
+                                PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
                             End If
-
-                            PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
                         End If
+                        'If errorMensaje.Contains("Fila: ") AndAlso errorMensaje.Contains("Columna: ") Then
+                        '    Dim partes = errorMensaje.Split(", ")
+                        '    Dim filaIndex As String
+                        '    Dim columna As String
+                        '    If errorMensaje.Contains("se repite en") Then
+                        '        ' Mensaje de error específico de ValidarYNoRepetido
+                        '        Dim subpartes = partes(2).Split(": ")
+                        '        For Each parte In partes
+                        '            Console.WriteLine(parte)
+                        '        Next
+
+                        '        filaIndex = subpartes(1).Trim()
+                        '        columna = "Y" ' La columna es fija en este caso
+                        '        '' Mensaje de error específico de ValidarYNoRepetido
+                        '        'Dim subpartes = partes(1).Split(": ")
+                        '        'filaIndex = subpartes(1).Trim()
+                        '        'columna = "Y" ' La columna es fija en este caso
+                        '    Else
+                        '        ' Mensaje de error general
+                        '        filaIndex = partes(2).Replace("Fila: ", String.Empty).Trim()
+                        '        columna = partes(3).Replace("Columna: ", String.Empty).Trim()
+                        '    End If
+
+                        '    PintarCelda(hoja.Cells($"{columna}{filaIndex}"))
+                        'End If
                     Next
                 End If
                 'ElseIf hojaNombre.Equals("RENDICION DE BOLETAS", StringComparison.OrdinalIgnoreCase) Then
