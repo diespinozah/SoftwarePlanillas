@@ -37,9 +37,9 @@ Public Class RendicionDeViaticosValidator
             End If
             If i > 0 Then
                 Dim fechaAnteriorV As Date
-                If Date.TryParse(rendicion.Data(i - 1)(21), fechaAnteriorV) AndAlso Date.TryParse(fila(21), fechaV) Then
+                If Date.TryParse(rendicion.Data(i - 1)(20), fechaAnteriorV) AndAlso Date.TryParse(fila(20), fechaV) Then
                     If fechaV < fechaAnteriorV Then
-                        errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: W, Error: fecha no está en orden cronológico")
+                        errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: V, Error: fecha no está en orden cronológico")
                     End If
                 End If
             End If
@@ -52,10 +52,10 @@ Public Class RendicionDeViaticosValidator
                 End If
             End If
             If fechaV > fechaW Then
-                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: V, Error: fecha en V es mayor que en W")
+                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: V, Error: fecha en Celda V es mayor que en Celda W")
             End If
             If fechaW < fechaV Then
-                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: W, Error: fecha en W es menor que en V")
+                errores.Add($"Archivo: {rendicion.Archivo}, Hoja: RENDICION DE VIATICOS, Fila: {filaIndex}, Columna: W, Error: fecha en Celda W es menor que en Celda V")
             End If
 
             ' Validar Celda Y - Valor numérico
