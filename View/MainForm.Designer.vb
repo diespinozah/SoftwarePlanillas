@@ -22,6 +22,7 @@ Partial Class MainForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.BtnComparar = New System.Windows.Forms.Button()
         Me.TxtArchivos = New System.Windows.Forms.RichTextBox()
         Me.BtnSeleccionarArchivos = New System.Windows.Forms.Button()
@@ -60,6 +61,7 @@ Partial Class MainForm
         '
         'BtnLimpiarCeldas
         '
+        Me.BtnLimpiarCeldas.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BtnLimpiarCeldas.Location = New System.Drawing.Point(922, 34)
         Me.BtnLimpiarCeldas.Name = "BtnLimpiarCeldas"
         Me.BtnLimpiarCeldas.Size = New System.Drawing.Size(119, 26)
@@ -77,6 +79,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.BtnSeleccionarArchivos)
         Me.Controls.Add(Me.BtnComparar)
         Me.Controls.Add(Me.TxtArchivos)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ValidadorPlanillas"
