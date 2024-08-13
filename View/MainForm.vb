@@ -281,4 +281,19 @@ Public Class MainForm
             MsgBox(ex.Message)
         End Try
     End Sub
+
+    Private Sub BtnLimpiarCeldas_Click(sender As Object, e As EventArgs) Handles BtnLimpiarCeldas.Click
+        Dim rutas As String() = TxtArchivos.Text.Split(New String() {vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+
+        If rutas.Length = 0 Then
+            MessageBox.Show("Por favor, selecciona archivos primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        For Each ruta In rutas
+            RestaurarColoresIniciales(ruta)
+        Next
+
+        MessageBox.Show("Las celdas han sido limpiadas.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
 End Class

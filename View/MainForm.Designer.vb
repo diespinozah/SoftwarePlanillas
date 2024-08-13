@@ -25,6 +25,7 @@ Partial Class MainForm
         Me.BtnComparar = New System.Windows.Forms.Button()
         Me.TxtArchivos = New System.Windows.Forms.RichTextBox()
         Me.BtnSeleccionarArchivos = New System.Windows.Forms.Button()
+        Me.BtnLimpiarCeldas = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BtnComparar
@@ -57,12 +58,22 @@ Partial Class MainForm
         Me.BtnSeleccionarArchivos.Text = "Seleccionar"
         Me.BtnSeleccionarArchivos.UseVisualStyleBackColor = True
         '
+        'BtnLimpiarCeldas
+        '
+        Me.BtnLimpiarCeldas.Location = New System.Drawing.Point(922, 34)
+        Me.BtnLimpiarCeldas.Name = "BtnLimpiarCeldas"
+        Me.BtnLimpiarCeldas.Size = New System.Drawing.Size(119, 26)
+        Me.BtnLimpiarCeldas.TabIndex = 13
+        Me.BtnLimpiarCeldas.Text = "Limpiar"
+        Me.BtnLimpiarCeldas.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1053, 507)
+        Me.Controls.Add(Me.BtnLimpiarCeldas)
         Me.Controls.Add(Me.BtnSeleccionarArchivos)
         Me.Controls.Add(Me.BtnComparar)
         Me.Controls.Add(Me.TxtArchivos)
@@ -75,4 +86,5 @@ Partial Class MainForm
     Friend WithEvents BtnComparar As Button
     Friend WithEvents TxtArchivos As RichTextBox
     Friend WithEvents BtnSeleccionarArchivos As Button
+    Friend WithEvents BtnLimpiarCeldas As Button
 End Class
