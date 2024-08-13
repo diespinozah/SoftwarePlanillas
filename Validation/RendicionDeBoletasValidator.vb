@@ -12,7 +12,6 @@ Public Class RendicionDeBoletasValidator
     }
 
     Private ReadOnly Funcionarios As String() = {"OSCAR RODRIGUEZ", "FIDEL PEREIRA"}
-
     Public Function Validar(model As Object) As List(Of String)
         Dim rendicion As RendicionDeBoletas = CType(model, RendicionDeBoletas)
         Dim errores As New List(Of String)
@@ -124,18 +123,4 @@ Public Class RendicionDeBoletasValidator
 
         Return duplicados
     End Function
-
-    Private Function QuitarTildes(texto As String) As String
-        Dim normalizedString As String = texto.Normalize(NormalizationForm.FormD)
-        Dim sb As New StringBuilder()
-
-        For Each c As Char In normalizedString
-            If CharUnicodeInfo.GetUnicodeCategory(c) <> UnicodeCategory.NonSpacingMark Then
-                sb.Append(c)
-            End If
-        Next
-
-        Return sb.ToString().Normalize(NormalizationForm.FormC)
-    End Function
-
 End Class

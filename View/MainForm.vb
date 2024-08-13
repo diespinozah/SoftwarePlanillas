@@ -278,7 +278,7 @@ Public Class MainForm
                 package.Save()
             End Using
         Catch ex As Exception
-            MsgBox(ex)
+            MsgBox(ex.Message)
         End Try
     End Sub
 End Class

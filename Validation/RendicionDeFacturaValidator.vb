@@ -123,16 +123,4 @@ Public Class RendicionDeFacturaValidator
 
         Return duplicados
     End Function
-    Private Function QuitarTildes(texto As String) As String
-        Dim normalizedString As String = texto.Normalize(NormalizationForm.FormD)
-        Dim sb As New StringBuilder()
-
-        For Each c As Char In normalizedString
-            If CharUnicodeInfo.GetUnicodeCategory(c) <> UnicodeCategory.NonSpacingMark Then
-                sb.Append(c)
-            End If
-        Next
-
-        Return sb.ToString().Normalize(NormalizationForm.FormC)
-    End Function
 End Class
