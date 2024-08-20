@@ -8,7 +8,7 @@ Public Class RendicionDeBoletasValidator
     Private ReadOnly Ingenieros As String() = {
         "DIEGO ESPINOZA", "JUAN SEPULVEDA", "GONZALO HONORATO",
         "TOMAS OLAVARRIA", "RICARDO ASTUDILLO", "DYLAN HERRERA",
-        "BRIAM VEGA", "PEDRO FERNANDEZ", "CLAUDIO ROMAN"
+        "BRIAM VEGA", "PEDRO FERNANDEZ", "CLAUDIO ROMAN", "MARCELO BASUALTO"
     }
 
     Private ReadOnly Funcionarios As String() = {"OSCAR RODRIGUEZ", "FIDEL PEREIRA"}

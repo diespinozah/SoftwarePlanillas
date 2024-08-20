@@ -27,6 +27,9 @@ Partial Class MainForm
         Me.TxtArchivos = New System.Windows.Forms.RichTextBox()
         Me.BtnSeleccionarArchivos = New System.Windows.Forms.Button()
         Me.BtnLimpiarCeldas = New System.Windows.Forms.Button()
+        Me.lblValidando = New System.Windows.Forms.Label()
+        Me.PBComparar = New System.Windows.Forms.ProgressBar()
+        Me.lblLimpiar = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'BtnComparar
@@ -69,12 +72,47 @@ Partial Class MainForm
         Me.BtnLimpiarCeldas.Text = "Limpiar"
         Me.BtnLimpiarCeldas.UseVisualStyleBackColor = True
         '
+        'lblValidando
+        '
+        Me.lblValidando.AutoSize = True
+        Me.lblValidando.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblValidando.Location = New System.Drawing.Point(319, 36)
+        Me.lblValidando.Name = "lblValidando"
+        Me.lblValidando.Size = New System.Drawing.Size(91, 20)
+        Me.lblValidando.TabIndex = 18
+        Me.lblValidando.Text = "Validando"
+        Me.lblValidando.Visible = False
+        '
+        'PBComparar
+        '
+        Me.PBComparar.Location = New System.Drawing.Point(434, 36)
+        Me.PBComparar.Name = "PBComparar"
+        Me.PBComparar.Size = New System.Drawing.Size(290, 23)
+        Me.PBComparar.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.PBComparar.TabIndex = 19
+        Me.PBComparar.Value = 100
+        Me.PBComparar.Visible = False
+        '
+        'lblLimpiar
+        '
+        Me.lblLimpiar.AutoSize = True
+        Me.lblLimpiar.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLimpiar.Location = New System.Drawing.Point(319, 34)
+        Me.lblLimpiar.Name = "lblLimpiar"
+        Me.lblLimpiar.Size = New System.Drawing.Size(95, 20)
+        Me.lblLimpiar.TabIndex = 21
+        Me.lblLimpiar.Text = "Limpiando"
+        Me.lblLimpiar.Visible = False
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1053, 507)
+        Me.Controls.Add(Me.lblLimpiar)
+        Me.Controls.Add(Me.PBComparar)
+        Me.Controls.Add(Me.lblValidando)
         Me.Controls.Add(Me.BtnLimpiarCeldas)
         Me.Controls.Add(Me.BtnSeleccionarArchivos)
         Me.Controls.Add(Me.BtnComparar)
@@ -84,10 +122,14 @@ Partial Class MainForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ValidadorPlanillas"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents BtnComparar As Button
     Friend WithEvents TxtArchivos As RichTextBox
     Friend WithEvents BtnSeleccionarArchivos As Button
     Friend WithEvents BtnLimpiarCeldas As Button
+    Friend WithEvents lblValidando As Label
+    Friend WithEvents PBComparar As ProgressBar
+    Friend WithEvents lblLimpiar As Label
 End Class
